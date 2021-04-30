@@ -1,3 +1,3 @@
-# opencv-test
+# Rasp-ncube-cam
 
-test
+Rasp Face detection maybe..
