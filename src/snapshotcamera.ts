@@ -1,8 +1,8 @@
+import EventEmitter from "events"
 import Path from "path"
 
 import fs from "fs-extra"
 import got from "got/dist/source"
-import EventEmitter from "node:events"
 
 import { execAsync, tempPath } from "./util"
 
