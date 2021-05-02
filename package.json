@@ -42,7 +42,12 @@
   },
   "dependencies": {
     "@bitauth/libauth": "^1.17.1",
+    "@types/express": "^4.17.11",
+    "@types/fs-extra": "^9.0.11",
     "@types/node": "^15.0.1",
+    "express": "^4.17.1",
+    "fs-extra": "^9.1.0",
+    "got": "^11.8.2",
     "opencv4nodejs": "^5.6.0"
   },
   "devDependencies": {
