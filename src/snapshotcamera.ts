@@ -47,7 +47,7 @@ export class SnapshotCamera extends EventEmitter {
         binary = await fs.readFile(filePath)
         await fs.rm(filePath)
       } else {
-        const response = await got(`http://${this.remote}/camera`, {encoding: null})
+        const response = await got(`http://${this.remote}/camera`, {responseType: "buffer"})
         if (response.statusCode == 200) {
           binary = response.rawBody
         } else {

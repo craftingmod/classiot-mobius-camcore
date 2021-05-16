@@ -48,7 +48,8 @@
     "express": "^4.17.1",
     "fs-extra": "^9.1.0",
     "got": "^11.8.2",
-    "opencv4nodejs": "^5.6.0"
+    "ncube-thyme-typescript": "1.0.1",
+    "opencv4nodejs": "5.6.0"
   },
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
