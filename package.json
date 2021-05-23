@@ -48,7 +48,8 @@
     "express": "^4.17.1",
     "fs-extra": "^9.1.0",
     "got": "^11.8.2",
-    "ncube-thyme-typescript": "1.0.1",
+    "ncube-thyme-typescript": "^1.1.1",
+    "node-webcam": "^0.8.0",
     "opencv4nodejs": "5.6.0"
   },
   "devDependencies": {
@@ -101,7 +102,8 @@
     }
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": false,
+    "semi": false
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",
