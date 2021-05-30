@@ -6,14 +6,17 @@ import fs from "fs-extra"
 
 export const httpPort = 7245
 export const cameraConfig = {
-  width: 1640,
-  height: 1232,
+  width: 3280,
+  height: 2464,
 }
+export const aeName = "schclass414"
 
 export const basePath = process.cwd()
 export const inputPath = Path.resolve(basePath, "input")
 export const tempPath = Path.resolve(basePath, "temp")
 export const configPath = Path.resolve(basePath, "config")
+
+export type Range = [[number, number], [number, number]]
 
 export function execAsync (cmd:string) {
   return new Promise<string>((res, rej) => {

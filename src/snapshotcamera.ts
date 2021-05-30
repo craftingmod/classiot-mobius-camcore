@@ -8,9 +8,9 @@ import { execAsync, tempPath } from "./util"
 
 export class SnapshotCamera extends EventEmitter {
   private taking = false
-  private isRasp:boolean
+  private isRasp: boolean
   private remote = ""
-  constructor(rasp:boolean, remoteHost?:string) {
+  constructor(rasp: boolean, remoteHost?: string) {
     super()
     this.isRasp = rasp
     if (remoteHost != null) {
@@ -23,12 +23,12 @@ export class SnapshotCamera extends EventEmitter {
     }
     return new Promise<Buffer>((res, rej) => {
       // eslint-disable-next-line prefer-const
-      let err:(e:unknown) => void;
-      const ok = (binary:Buffer) => {
+      let err: (e: unknown) => void
+      const ok = (binary: Buffer) => {
         this.off("error", err)
         res(binary)
       }
-      err = (e:unknown) => {
+      err = (e: unknown) => {
         this.off("taken", ok)
         rej(e)
       }
@@ -41,13 +41,17 @@ export class SnapshotCamera extends EventEmitter {
     const fileName = `${Math.floor(Math.random() * 32767).toString(16)}.jpg`
     const filePath = Path.resolve(tempPath, fileName)
     try {
-      let binary:Buffer
+      let binary: Buffer
       if (this.isRasp) {
-        await execAsync(`v4l2-ctl --stream-mmap=3 --stream-count=1 --stream-to="${filePath}"`)
+        await execAsync(
+          `v4l2-ctl --stream-mmap=3 --stream-count=1 --stream-to="${filePath}"`
+        )
         binary = await fs.readFile(filePath)
         await fs.rm(filePath)
       } else {
-        const response = await got(`http://${this.remote}/camera`, {responseType: "buffer"})
+        const response = await got(`http://${this.remote}/camera`, {
+          responseType: "buffer",
+        })
         if (response.statusCode == 200) {
           binary = response.rawBody
         } else {

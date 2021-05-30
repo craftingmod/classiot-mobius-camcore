@@ -36,7 +36,7 @@ const thyme = new Thyme({
   main: {
     type: ThymeProtocol.MQTT,
     host: "203.253.128.177",
-    port: 1873,
+    port: 1883,
   },
 })
 httpServer.listen(httpPort, () => {
@@ -73,14 +73,13 @@ async function setup() {
   await thyme.connect()
   const mobius = await thyme.getCSEBase("Mobius", "Mobius2")
   // get sensor value
-  ae = await mobius.ensureApplicationEntity("schclass01")
+  ae = await mobius.ensureApplicationEntity("schclass_dev")
   chairs = await ae.ensureContainer("chair", 1024)
   cameraInterval = await ae.ensureContainer("camera_interval", 1024)
-  const resp = await cameraInterval.queryLastValue()
-  if (resp.length <= 0) {
+  try {
+    cameraIntervalms = Number.parseInt(await cameraInterval.queryLastValue())
+  } catch (err) {
     cameraIntervalms = 1000
-  } else {
-    cameraIntervalms = Number.parseInt(resp)
   }
   cameraInterval.on("changed", (value) => {
     try {
@@ -103,11 +102,13 @@ async function setup() {
       `v4l2-ctl --set-fmt-video=width=${cameraConfig.width},height=${cameraConfig.height},pixelformat=3`
     )
   }
+  console.log("Setup complete")
 }
 
 async function main() {
+  console.log("Do main")
   if (!is_rasp) {
-    // return;
+    return
   }
   const start = Date.now()
   const photo = await snapshot.requestSnapshot()
