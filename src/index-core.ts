@@ -14,8 +14,8 @@ import {
   readConfig,
 } from "./util"
 
-const nmInterval = 600000
-const firstInterval = 30000
+const nmInterval = 1800 * 1000
+const firstInterval = 120 * 1000
 
 let hasCamera:boolean
 const httpServer = express()
@@ -86,6 +86,7 @@ let rawValue:ThymeContainer
 let thymePeople:ThymeContainer
 let wakeUp:ThymeContainer
 let idle = true
+let lastPeople:number = -1
 
 let nextTask:NodeJS.Timeout = null
 
@@ -147,8 +148,22 @@ async function setup() {
   classAE = await thyme.ensureApplicationEntity(aeName)
   rawValue = await classAE.ensureContainer("camera_raw", 1000 * 1000 * 5)
   thymePeople = await classAE.ensureContainer("cam", 10240)
-  wakeUp = await classAE.ensureContainer("camera_wake", 1024, true)
+  wakeUp = await classAE.ensureContainer("ultrasonic", 1024, true)
   wakeUp.on("changed", (value, cin) => {
+    let num = -1
+    if (typeof value === "number") {
+      num = value;
+    } else if (typeof value === "string") {
+      num = Number.parseInt(value)
+    }
+    if (num != lastPeople) {
+      lastPeople = num
+      if (nextTask != null) {
+        clearTimeout(nextTask)
+      }
+      detection(firstInterval)
+    }
+    /*
     const nowIdle = value === "0"
     if (nowIdle != idle) {
       if (nextTask != null) {
@@ -158,16 +173,9 @@ async function setup() {
         detection(firstInterval)
       }
     }
-    idle = nowIdle
+    */
   })
-  let nIdle = false
-  try {
-    nIdle = await wakeUp.queryLastValue() === "0"
-  } catch (err) {
-    console.log(err)
-    // .
-  }
-  await wakeUp.addContentInstance(nIdle ? "0" : "1")
+  detection(firstInterval)
 }
 
 setup()
